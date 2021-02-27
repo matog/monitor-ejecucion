@@ -23,10 +23,12 @@ df = pd.read_excel('Base_mes.xlsx')
 # Convertimos el campo YYYYMM a fecha y le quitamos el numero de dia (siempre es el 1ro, de cada mes, cuando
 #   en realidad es el ultimo dia del mes)
 df['yyyymm'] = pd.to_datetime(df['yyyymm'], format='%Y%m')
+
+# Rango del eje X de los gráficos
 range_x1 = df['yyyymm'].iloc[0]
 range_x2 = df['yyyymm'].iloc[-1]
-print(range_x2)
-# range_x2
+
+# convertimos la fecha a YYYYMM
 df['yyyymm'] = df['yyyymm'].dt.date.apply(lambda x: x.strftime('%Y-%m'))
 df = df.rename(columns={'yyyymm': 'fecha'})
 
@@ -38,14 +40,16 @@ df['credito_inicial'] = (df['credito_inicial'].astype(float)/1000000).round(2)
 # Filtramos programas e incisos
 df = df.loc[df['programa_id']<40]
 df = df.loc[df['inciso_id']<6]
+
+# Obtención de la ejecucion, ultima actualizacion, y SAF
 vigente = df['credito_vigente'].sum
 devengado = df['credito_devengado'].sum
 ejecucion = ((devengado(0)/vigente(0)).round(2))*100
 ejecucion_texto = "Ejecucion:" + str(ejecucion) + "%"
 actualizacion = df['actualizacion'].iloc[0]
 actualizacion = "Última actualización:" + df['actualizacion'].iloc[0]
-
-
+saf_id = df['servicio_id'].iloc[0]
+titulo = "Ejecución Presupuestaria SAF " + str(saf_id)
 # print(df.columns)
 
 # dt = datetime.datetime.today()
@@ -108,7 +112,7 @@ saf.update_xaxes(range=[range_x1, range_x2])
 app.title = 'Ejecución Presupuestaria'
 app.layout = dbc.Container([
     dbc.Row([
-        dbc.Col([html.H1("Ejecución Presupuestaria SAF322",
+        dbc.Col([html.H1(titulo,
                          className='text-center text-primary, mb-4'),
                  ], width=12)
     ]),
@@ -141,7 +145,7 @@ app.layout = dbc.Container([
             dcc.Dropdown(
                 id='prg-dpdn',
                 options=[{'label': x.title(), 'value': x} for x in sorted(df.programa_desc.unique())],
-                value=['Actividades Centrales'],
+                value=[df.programa_desc.iloc[0]],
                 placeholder="Seleccione Programa",
                 # bs_size="sm",
                 multi=True,
