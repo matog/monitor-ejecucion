@@ -12,7 +12,8 @@ Los requisitos para la correcta visualización de la información es tener un ta
 - 'credito_devengado': Crédito presupuestario devengado.
 - 'actualizacion': Fecha de ultima actualización de la base.
 - 'programa_id': Id del programa presupuestario.
-- programa_desc': Descripción del programa presupuestario.
-- inciso_id: Id del inciso
+- 'programa_desc'': Descripción del programa presupuestario.
+- 'inciso_id': Id del inciso
 - 'fuente_de_financiamiento_desc': Descripción de la fuente de financiamiento.
 
+![image](https://user-images.githubusercontent.com/660448/109393371-fe195a00-78ff-11eb-8e37-bbbe6d824828.png)
