@@ -23,6 +23,10 @@ df = pd.read_excel('Base_mes.xlsx')
 # Convertimos el campo YYYYMM a fecha y le quitamos el numero de dia (siempre es el 1ro, de cada mes, cuando
 #   en realidad es el ultimo dia del mes)
 df['yyyymm'] = pd.to_datetime(df['yyyymm'], format='%Y%m')
+range_x1 = df['yyyymm'].iloc[0]
+range_x2 = df['yyyymm'].iloc[-1]
+print(range_x2)
+# range_x2
 df['yyyymm'] = df['yyyymm'].dt.date.apply(lambda x: x.strftime('%Y-%m'))
 df = df.rename(columns={'yyyymm': 'fecha'})
 
@@ -41,7 +45,8 @@ ejecucion_texto = "Ejecucion:" + str(ejecucion) + "%"
 actualizacion = df['actualizacion'].iloc[0]
 actualizacion = "Última actualización:" + df['actualizacion'].iloc[0]
 
-print(df.columns)
+
+# print(df.columns)
 
 # dt = datetime.datetime.today()
 # inicio = date(2020,1,1)
@@ -75,7 +80,7 @@ alert = dbc.Alert("Por favor seleccione un programa.",
 
 # Grafico estatico
 table= df.groupby(['fecha','fuente_de_financiamiento_desc'])['credito_devengado'].sum().unstack()
-table = table.assign(total=table.sum(1)).stack().to_frame('credito_devengado')
+table = table.assign(TOTAL=table.sum(1)).stack().to_frame('credito_devengado')
 table.reset_index(inplace=True)
 saf = px.line(table,
               x='fecha',
@@ -96,6 +101,8 @@ saf.update_layout(
         ),
     )
 )
+saf.update_xaxes(range=[range_x1, range_x2])
+
 # saf.update_layout(plot_bgcolor='rgba(0, 0, 0, 0)', paper_bgcolor='rgba(0, 0, 0, 0)')
 
 app.title = 'Ejecución Presupuestaria'
@@ -180,7 +187,8 @@ app.layout = dbc.Container([
                 },
             ),
         ], width = 12)
-    )
+    ),
+    dbc.Row(html.H1(" "))
 ])
 
 
@@ -219,12 +227,14 @@ def programas(programa):
                     ),
                 )
             )
+        fig.update_xaxes(range=[range_x1, range_x2])
+
         # fig.update_layout(plot_bgcolor='rgba(0, 0, 0, 0)', paper_bgcolor='rgba(0, 0, 0, 0)')
 
         dff_tbl = df[df.programa_desc.isin(programa)]
         dff_tbl = dff_tbl.groupby(['programa_desc'])['credito_vigente', 'credito_devengado','credito_inicial'].sum().reset_index()
         dff_tbl = dff_tbl.round(3)
-        print(dff_tbl)
+        # print(dff_tbl)
         return dash.no_update, fig, dff_tbl.to_dict(orient='records')
     elif len(programa) == 0:
         return alert, dash.no_update, dash.no_update
