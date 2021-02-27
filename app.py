@@ -188,7 +188,9 @@ app.layout = dbc.Container([
             ),
         ], width = 12)
     ),
-    dbc.Row(html.H1(" "))
+    dbc.Row(
+        dbc.Col([html.H6(" ")])
+    )
 ])
 
 
