@@ -16,4 +16,8 @@ Los requisitos para la correcta visualización de la información es tener un ta
 - 'inciso_id': Id del inciso
 - 'fuente_de_financiamiento_desc': Descripción de la fuente de financiamiento.
 
+Esta información está disponible en [Presupuesto Abierto](https://www.presupuestoabierto.gob.ar/sici/datos-abiertos#)
+
+
+
 ![image](https://user-images.githubusercontent.com/660448/109393371-fe195a00-78ff-11eb-8e37-bbbe6d824828.png)
