@@ -17,7 +17,7 @@ import dash_table
 import pandas as pd
 
 # Cargamos la base
-df = pd.read_csv('base.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/matog/monitor-ejecucion/master/base.csv')
 
 
 # Convertimos el campo impacto_presupuestario_mes a fecha
