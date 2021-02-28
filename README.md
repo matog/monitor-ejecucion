@@ -2,22 +2,25 @@
 
 Esta app tiene como objetivo generar un dashboard para analizar la ejecución presupuestaria de un SAF (sistema adminsitravio financiero) de un organismo de la APN (Administración Pública Nacional) de Argentina
 
-Está programada 100% en python, utilizando el framework _Dash_. Está desarrollada con un diseño _responsive_, para poder ser accesible de un dispositivo móvil,. 
+Está desarrollado 100% en python, utilizando el framework _Dash_, con un diseño _responsive_, para poder ser accesible de un dispositivo móvil,. 
 
-Los requisitos para la correcta visualización de la información es tener un tabla "Base_mes.xlsx" ubicada en el directorio de la app, donde se tenga la ejecución mensual a nivel programa-inciso, con los siguientes campos:
+## Requisitos
 
-- 'yyyymm': Fecha de registro en formato _yyyymm_.
-- 'credito_inicial': Crédito presupuestario inicial.
-- 'credito_vigente': Crédito presupuestario vigente.
-- 'credito_devengado': Crédito presupuestario devengado.
-- 'actualizacion': Fecha de ultima actualización de la base.
-- 'programa_id': Id del programa presupuestario.
-- 'programa_desc'': Descripción del programa presupuestario.
-- 'inciso_id': Id del inciso
-- 'fuente_de_financiamiento_desc': Descripción de la fuente de financiamiento.
+### Paquetes
+Los requisitos en términos de paquetes se encuentran en el archivo _requirements.txt_.
 
-Esta información está disponible en [Presupuesto Abierto](https://www.presupuestoabierto.gob.ar/sici/datos-abiertos#)
+### Información presupuestaria
+Para que la app tenga un funcionamiento correcto, es necesario tener un tabla "base.csv" ubicada en el directorio de la app, donde se tenga la ejecución mensual a nivel programa-inciso.
 
+Esta información está disponible en [Presupuesto Abierto](https://www.presupuestoabierto.gob.ar/sici/datos-abiertos#). Por ejemplo, para ver la ejecución del ejercicio 2020, seleccionamos el "Año:2020", en Temas elegimos "Presupuesto de gastos y su ejecución" y en "Resultados encontrados" descargamos "Presupuesto de gastos y su ejecución detallada - agrupación mensual 2020"  
+![image](https://user-images.githubusercontent.com/660448/109428493-165ba880-79d6-11eb-8a6e-7a4bb7358eda.png)
 
+#### Seleccionar SAF
 
-![image](https://user-images.githubusercontent.com/660448/109393371-fe195a00-78ff-11eb-8e37-bbbe6d824828.png)
+El archivo _saf_selector.ipynb_ es una notebook que al correrla en el mismo directorio que la base.csv, arroja un cuadro con el total de crédito vigente por SAF.
+
+En la misma nota, está indicado donde cambiar el SAF para exportar una nueva base para poder correrla en el dashboard.
+
+### Screenshot
+
+![image](https://user-images.githubusercontent.com/660448/109428624-9aae2b80-79d6-11eb-9483-8a5ebb980af5.png)
