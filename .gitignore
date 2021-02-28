@@ -2,4 +2,5 @@ basura/
 turdep/
 .ipynb_checkpoints/
 .idea/
+venv/
 Base_mes.xlsx

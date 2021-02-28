@@ -4,7 +4,7 @@ Esta app tiene como objetivo generar un dashboard para analizar la ejecución pr
 
 Está programada 100% en python, utilizando el framework _Dash_. Está desarrollada con un diseño _responsive_, para poder ser accesible de un dispositivo móvil,. 
 
-Los requisitos para la correcta visualización de la información es tener un tabla "Base_mes.xlsx", donde se tenga la ejecución mensual a nivel programa-inciso, con los siguientes campos:
+Los requisitos para la correcta visualización de la información es tener un tabla "Base_mes.xlsx" ubicada en el directorio de la app, donde se tenga la ejecución mensual a nivel programa-inciso, con los siguientes campos:
 
 - 'yyyymm': Fecha de registro en formato _yyyymm_.
 - 'credito_inicial': Crédito presupuestario inicial.
