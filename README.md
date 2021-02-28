@@ -4,6 +4,8 @@ Esta app tiene como objetivo generar un dashboard para analizar la ejecución pr
 
 Está desarrollado 100% en python, utilizando el framework _Dash_, con un diseño _responsive_, para poder ser accesible de un dispositivo móvil,. 
 
+Una versión demo está alojada en [Heroku](https://monitor-ejecucion.herokuapp.com/)
+
 ## Requisitos
 
 ### Paquetes
