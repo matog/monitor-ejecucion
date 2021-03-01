@@ -84,9 +84,18 @@ saf.update_layout(
             # size=10,
             color="black"
         ),
+    ),
+    xaxis=dict(
+        tickmode='linear',
+        tick0=1,
+        dtick=1
     )
 )
 saf.update_xaxes(range=[range_x1, range_x2])
+
+
+
+
 
 app.title = 'Ejecución Presupuestaria'
 app.layout = dbc.Container([
@@ -114,6 +123,7 @@ app.layout = dbc.Container([
             dcc.Graph(
                 id='saf-graph',
                 figure=saf,
+                responsive=True,
                 config={
                     'displayModeBar': False}
                 ),
@@ -142,6 +152,7 @@ app.layout = dbc.Container([
         dbc.Col([
             dcc.Graph(
                 id='prg-graph',
+                responsive=True,
                 config={
                     'displayModeBar': False}
 
@@ -216,8 +227,14 @@ def programas(programa):
                     # size=10,
                     color="black"
                     ),
-                )
+                ),
+            xaxis=dict(
+                tickmode='linear',
+                tick0=1,
+                dtick=1
             )
+        )
+
         fig.update_xaxes(range=[range_x1, range_x2])
         dff_tbl = df[df.programa_desc.isin(programa)]
         dff_tbl = dff_tbl.groupby(['programa_desc'])['credito_vigente', 'credito_devengado'].sum().reset_index()
