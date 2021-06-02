@@ -1,6 +1,6 @@
 # Dashboard de la ejecución presupuestaria de un SAF de la APN
 
-Esta app tiene como objetivo generar un dashboard para analizar la ejecución presupuestaria de un SAF (sistema adminsitravio financiero) de un organismo de la APN (Administración Pública Nacional) de Argentina
+Esta app tiene como objetivo generar un dashboard para analizar la ejecución presupuestaria de un SAF (sistema administrativo financiero) de un organismo de la APN (Administración Pública Nacional) de Argentina
 
 Está desarrollado 100% en python, utilizando el framework _Dash_, con un diseño _responsive_, para poder ser accesible de un dispositivo móvil,. 
 
