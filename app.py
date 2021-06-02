@@ -35,13 +35,18 @@ df = df.loc[df['inciso_id']<6]
 vigente = df['credito_vigente'].sum
 devengado = df['credito_devengado'].sum
 ejecucion = ((devengado(0)/vigente(0)).round(2))*100
+ejecucion = str(round(ejecucion, 2))
 ejecucion_texto = "Ejecucion:" + str(ejecucion) + "%"
 actualizacion = df['ultima_actualizacion_fecha'].iloc[0]
 saf_id = df['servicio_id'].iloc[0]
 titulo = "Ejecución Presupuestaria SAF " + str(saf_id)
 programas = df['programa_desc'].unique()
 
-
+df.rename(columns = {'credito_devengado': 'Credito Devengado',
+                     'impacto_presupuestario_mes': 'Mes',
+                     'fuente_financiamiento_desc' : 'Fuente de Financiamiento'
+                     },
+                inplace = True)
 
 # -------------------------------------------------------
 # APP DE DASH
@@ -64,13 +69,13 @@ alert = dbc.Alert("Por favor seleccione un programa.",
 
 
 # Grafico estatico
-table= df.groupby(['impacto_presupuestario_mes','fuente_financiamiento_desc'])['credito_devengado'].sum().unstack()
-table = table.assign(TOTAL=table.sum(1)).stack().to_frame('credito_devengado')
+table= df.groupby(['Mes','Fuente de Financiamiento'])['Credito Devengado'].sum().unstack()
+table = table.assign(TOTAL=table.sum(1)).stack().to_frame('Credito Devengado')
 table.reset_index(inplace=True)
 saf = px.line(table,
-              x='impacto_presupuestario_mes',
-              y='credito_devengado',
-              color = 'fuente_financiamiento_desc',
+              x='Mes',
+              y='Credito Devengado',
+              color = 'Fuente de Financiamiento',
               template = 'plotly_white'
               # template = 'plotly_dark',
              )
@@ -106,8 +111,8 @@ app.layout = dbc.Container([
     ]),
     dbc.Row(
         [
-            dbc.Col(html.H3(ejecucion_texto)),
-            dbc.Col(html.H3(actualizacion)),
+            dbc.Col(html.H4(ejecucion_texto)),
+            dbc.Col(html.H4(actualizacion)),
         ]
     ),
     dbc.Row(
@@ -166,7 +171,7 @@ app.layout = dbc.Container([
                 columns=[
                     {'name': 'Programa', 'id': 'programa_desc'},
                     {'name': 'Credito Vigente', 'id': 'credito_vigente'},
-                    {'name': 'Credito Devengado', 'id': 'credito_devengado'},
+                    {'name': 'Credito Devengado', 'id': 'Credito Devengado'},
                 ],
                 page_action="native",
                 page_size=10,
@@ -210,10 +215,10 @@ app.layout = dbc.Container([
 def programas(programa):
     if len(programa) > 0:
         dff = df[df.programa_desc.isin(programa)]
-        dff = dff.groupby(['impacto_presupuestario_mes','programa_desc']).sum().reset_index()
+        dff = dff.groupby(['Mes','programa_desc']).sum().reset_index()
         fig = px.line(dff,
-                      x='impacto_presupuestario_mes',
-                      y='credito_devengado',
+                      x='Mes',
+                      y='Credito Devengado',
                       color='programa_desc',
                       template = 'plotly_white'
                       )
@@ -237,7 +242,7 @@ def programas(programa):
 
         fig.update_xaxes(range=[range_x1, range_x2])
         dff_tbl = df[df.programa_desc.isin(programa)]
-        dff_tbl = dff_tbl.groupby(['programa_desc'])['credito_vigente', 'credito_devengado'].sum().reset_index()
+        dff_tbl = dff_tbl.groupby(['programa_desc'])['credito_vigente', 'Credito Devengado'].sum().reset_index()
         dff_tbl = dff_tbl.round(3)
         # print(dff_tbl)
         return dash.no_update, fig, dff_tbl.to_dict(orient='records')
