@@ -44,7 +44,8 @@ programas = df['programa_desc'].unique()
 
 df.rename(columns = {'credito_devengado': 'Credito Devengado',
                      'impacto_presupuestario_mes': 'Mes',
-                     'fuente_financiamiento_desc' : 'Fuente de Financiamiento'
+                     'fuente_financiamiento_desc' : 'Fuente de Financiamiento',
+                     'programa_desc' : 'Programa'
                      },
                 inplace = True)
 
@@ -139,7 +140,7 @@ app.layout = dbc.Container([
             dcc.Dropdown(
                 id='prg-dpdn',
                 options=[{'label': x.title(), 'value': x} for x in sorted(programas)],
-                value=[df['programa_desc'].iloc[0]],
+                value=[df['Programa'].iloc[0]],
                 placeholder="Seleccione Programa",
                 # bs_size="sm",
                 multi=True,
@@ -169,7 +170,7 @@ app.layout = dbc.Container([
             dash_table.DataTable(
                 id='prg-tbl',
                 columns=[
-                    {'name': 'Programa', 'id': 'programa_desc'},
+                    {'name': 'Programa', 'id': 'Programa'},
                     {'name': 'Credito Vigente', 'id': 'credito_vigente'},
                     {'name': 'Credito Devengado', 'id': 'Credito Devengado'},
                 ],
@@ -214,12 +215,12 @@ app.layout = dbc.Container([
 )
 def programas(programa):
     if len(programa) > 0:
-        dff = df[df.programa_desc.isin(programa)]
-        dff = dff.groupby(['Mes','programa_desc']).sum().reset_index()
+        dff = df[df.Programa.isin(programa)]
+        dff = dff.groupby(['Mes','Programa']).sum().reset_index()
         fig = px.line(dff,
                       x='Mes',
                       y='Credito Devengado',
-                      color='programa_desc',
+                      color='Programa',
                       template = 'plotly_white'
                       )
         fig.update_layout(
@@ -241,8 +242,8 @@ def programas(programa):
         )
 
         fig.update_xaxes(range=[range_x1, range_x2])
-        dff_tbl = df[df.programa_desc.isin(programa)]
-        dff_tbl = dff_tbl.groupby(['programa_desc'])['credito_vigente', 'Credito Devengado'].sum().reset_index()
+        dff_tbl = df[df.Programa.isin(programa)]
+        dff_tbl = dff_tbl.groupby(['Programa'])['credito_vigente', 'Credito Devengado'].sum().reset_index()
         dff_tbl = dff_tbl.round(3)
         # print(dff_tbl)
         return dash.no_update, fig, dff_tbl.to_dict(orient='records')
