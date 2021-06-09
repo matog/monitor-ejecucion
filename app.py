@@ -196,7 +196,7 @@ app.layout = dbc.Container([
         dbc.Col(html.A('Fuente: Presupuesto Abierto', href='http://www.presupuestoabierto.gob.ar', target="_blank")),
         dbc.Col(),
         dbc.Col(html.A('By Mato', href='http://matog.github.io/cv', target="_blank"), style={'text-align': 'right'})
-    ])
+    ]),
 ])
 
 
