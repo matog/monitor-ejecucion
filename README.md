@@ -25,4 +25,4 @@ En la misma nota, está indicado donde cambiar el SAF para exportar una nueva ba
 
 ### Screenshot
 
-![imagen](https://user-images.githubusercontent.com/660448/121439503-6e526580-c95c-11eb-92c6-339e983f42d0.png)
+![screenshot](https://user-images.githubusercontent.com/660448/121745552-d6c75100-cada-11eb-8ca5-fa4e5c4d8189.jpeg)
