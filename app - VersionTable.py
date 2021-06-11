@@ -16,28 +16,6 @@ import pandas as pd
 import dash_table
 import pandas as pd
 
-# the style arguments for the main content page.
-CONTENT_STYLE = {
-    'margin-left': '15%',
-    'margin-right': '15%',
-    'top': 0,
-    'padding': '20px 10px'
-}
-
-TEXT_STYLE = {
-    'textAlign': 'center',
-    'color': '#191970'
-}
-
-CARD_TEXT_STYLE = {
-    'textAlign': 'center',
-    'color': '#0074D9'
-}
-
-ALERT_STYLE = {
-    'width' : '100%'
-}
-
 # Cargamos la base
 df = pd.read_csv('base.csv')
 
@@ -58,7 +36,7 @@ vigente = df['credito_vigente'].sum
 devengado = df['credito_devengado'].sum
 ejecucion = ((devengado(0)/vigente(0)).round(2))*100
 ejecucion = str(round(ejecucion, 2))
-ejecucion_texto = "Ejecución: "+ str(ejecucion) + "%"
+ejecucion_texto = "Ejecucion:" + str(ejecucion) + "%"
 actualizacion = df['ultima_actualizacion_fecha'].iloc[0]
 saf_id = df['servicio_id'].iloc[0]
 titulo = "Ejecución Presupuestaria SAF " + str(saf_id)
@@ -84,10 +62,12 @@ app = dash.Dash(__name__,
                 )
 server = app.server
 
-alert = dbc.Alert("Por favor seleccione un programa presupuestario.                                           ",
+alert = dbc.Alert("Por favor seleccione un programa.",
                   color="danger",
                   duration = 3000,
-                  )
+                  # dismissable=True
+                  )  # use dismissable or duration=5000 for alert to close in x milliseconds
+
 
 # Grafico estatico
 table= df.groupby(['Mes','Fuente de Financiamiento'])['Credito Devengado'].sum().unstack()
@@ -122,55 +102,46 @@ saf.update_xaxes(range=[range_x1, range_x2])
 
 
 
-content_alert_row = dbc.Row([
-    html.Div(
+
+app.title = 'Ejecución Presupuestaria'
+app.layout = dbc.Container([
+    dbc.Row([
+        dbc.Col([html.H1(titulo,
+                         className='text-center text-primary, mb-4'),
+                 ], width=12)
+    ]),
+    dbc.Row(
+        [
+            dbc.Col(html.H4(ejecucion_texto)),
+            dbc.Col(html.H4(actualizacion)),
+        ]
+    ),
+    dbc.Row(
+        dbc.Col([
+            html.Div(
                 id="alert_prg",
-                children=[],
-                style=ALERT_STYLE
+                children=[]
             )
-])
-
-content_info_row = dbc.Row([
-    dbc.Col(
-        dbc.Card(
-            [
-                dbc.CardBody(
-                    [
-                        html.H4(id='card_title_1', children=[ejecucion_texto], className='card-title',
-                                style=CARD_TEXT_STYLE),
-                        # html.P(id='card_text_1', children=['Ejecución a la fecha'], style=CARD_TEXT_STYLE),
-                    ]
-                )
-            ]
-        ),
-        md=6
-
+        ], width = 12)
     ),
-    dbc.Col(
-        dbc.Card(
-            [
-                dbc.CardBody(
-                    [
-                        html.H4(actualizacion, className='card-title', style=CARD_TEXT_STYLE),
-                        # html.P('Última actualización.', style=CARD_TEXT_STYLE),
-                    ]
+    dbc.Row([
+        dbc.Col([
+            dcc.Graph(
+                id='saf-graph',
+                figure=saf,
+                responsive=True,
+                config={
+                    'displayModeBar': False}
                 ),
-            ]
-        ),
-        md=6
-    ),
-])
-
-content_select_row = dbc.Row([
-    dbc.Col(
-        dbc.Card(
-            [
-                dbc.CardBody(
-                    [dcc.Dropdown(
+         ], width = 12)
+    ]),
+    dbc.Row([
+        dbc.Col([
+            dcc.Dropdown(
                 id='prg-dpdn',
                 options=[{'label': x.title(), 'value': x} for x in sorted(programas)],
                 value=[df['Programa'].iloc[0]],
-                placeholder="Seleccione programa presupuestario ",
+                placeholder="Seleccione Programa",
                 # bs_size="sm",
                 multi=True,
                 style=dict(
@@ -178,37 +149,25 @@ content_select_row = dbc.Row([
                     display='inline-block',
                     # verticalAlign="middle",
                     # fontSize=10,
-                    # height="100%",
-                    ),
-                    ),
-                    ]
-                )
-            ]
-        ),
-        md=12
-    ),
-    ])
+                    height="100%",
+                ),
+            ),
+            ], width=12)
+    ]),
+    dbc.Row([
+        dbc.Col([
+            dcc.Graph(
+                id='prg-graph',
+                responsive=True,
+                config={
+                    'displayModeBar': False}
 
-
-content_third_row = dbc.Row(
-    [
-        dbc.Col(
-            dcc.Graph(id='grapsaf-graph', figure = saf), md=12
-        ),
-    ]
-)
-
-content_fourth_row = dbc.Row(
-    [
-        dbc.Col(
-            dcc.Graph(id='prg-graph'), md=12
-        ),
-    ]
-)
-
-content_fifth_row = dbc.Row(
-    [
-        dbc.Col(dash_table.DataTable(
+                ),
+            ],width=12)
+    ]),
+    dbc.Row(
+        dbc.Col([
+            dash_table.DataTable(
                 id='prg-tbl',
                 columns=[
                     {'name': 'Programa', 'id': 'Programa'},
@@ -219,50 +178,27 @@ content_fifth_row = dbc.Row(
                 page_size=10,
                 style_as_list_view=True,
                 style_cell={
+                    # 'font_family': 'cursive',
+                    # 'font_size': '8px',
                     'padding': '1px',
+                    # 'text_align': 'center'
                 },
             ),
-        )
-    ]
-)
+        ], width = 12)
+    ),
+    dbc.Row([
+        dbc.Col([
+            html.Br(),
+            html.Br()
+            ]),
+    ]),
+    dbc.Row([
+        dbc.Col(html.A('Fuente: Presupuesto Abierto', href='http://www.presupuestoabierto.gob.ar', target="_blank")),
+        dbc.Col(),
+        dbc.Col(html.A('By Mato', href='http://matog.github.io/cv', target="_blank"), style={'text-align': 'right'})
+    ]),
+])
 
-content_footer_row = dbc.Row([
-        dbc.Col(
-            html.A('Fuente: Presupuesto Abierto', href='http://www.presupuestoabierto.gob.ar', target="_blank")
-        ),
-        dbc.Col(
-
-        ),
-        dbc.Col(
-            html.A('By Mato', href='http://matog.github.io/cv', target="_blank"), style={'text-align': 'right'}
-        )
-    ])
-
-app.title = 'Ejecución Presupuestaria'
-
-content =  html.Div(
-    [
-        html.H2('Monitor de Ejecución presupuestaria SAF364', style=TEXT_STYLE),
-        html.Hr(),
-        content_alert_row,
-        html.Br(),
-        content_info_row,
-        html.Br(),
-        # content_text_info_row,
-        content_select_row,
-        html.Br(),
-        content_third_row,
-        content_fourth_row,
-        html.Br(),
-        content_fifth_row,
-        html.Br(),
-        content_footer_row
-
-    ],
-    style=CONTENT_STYLE
-)
-
-app.layout = html.Div([content])
 
 
 
